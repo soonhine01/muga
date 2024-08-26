@@ -1,0 +1,51 @@
+void main() {
+//Soru 1 
+int number = -98; 
+if(number<0) { 
+print ("Bu bir negatif sayıdır."); 
+} else if (number>0 ) { 
+print("Bu bir pozitif sayıdır."); 
+} else 
+print("sayı sıfırdır."); 
+}
+
+void main() {
+
+//Soru 2 
+
+List<int> sayilar=[12,5,64,21,9]; 
+int toplam = 0; 
+  
+for(int sayi in sayilar){ 
+toplam += sayi; 
+} 
+print("toplam = $toplam"); 
+  
+}
+void main() {
+
+//Soru3 
+Map<String, int>filmler = { 
+  "Inception": 2010,
+  "The Shawshank Redemption":1994,
+  "The Godfather":1972,
+  "Pulp Fiction": 1994,
+  "The DarkNight":2008,
+  "Titanic":1997,
+  "Avatar":2009,
+  "Back to the future": 1985, 
+  "The Lion King":1994,
+  "Fight Clup":1999,
+  "Forrest Gump":1994,
+  "The Matrix":1999,
+  "Gladiator":2000,
+  "The Prestige":2006,};  
+
+if(filmler.containsKey("Gladiator")){ 
+print("Listede Gladiator filmi mevcut"); 
+} 
+else{ 
+print("Listede Gladiator Filmi mevcut değil!"); 
+}
+  }
+
