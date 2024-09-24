@@ -1,0 +1,232 @@
+import 'package:flutter/material.dart';
+import 'SonucSayfasi.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: AnketSayfasi(),
+    );
+  }
+}
+
+class AnketSayfasi extends StatefulWidget {
+  @override
+  State<AnketSayfasi> createState() => _AnketSayfasiState();
+}
+
+class _AnketSayfasiState extends State<AnketSayfasi> {
+  String inputValue = '';
+  TextEditingController passController = TextEditingController();
+  String text1 = '';
+  bool _isSwitched = false;
+  bool _showResult = false;
+  double _slideValue = 0;
+  var pass = '';
+  String? _selectedGender = null;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+        shadowColor: Colors.black,
+        titleSpacing: 25,
+        backgroundColor: Colors.orange,
+        title: Text(
+          'Kişilik Anketi',
+          style: TextStyle(
+              color: Colors.white, fontSize: 32, fontWeight: FontWeight.w500),
+        ),
+        centerTitle: true,
+      ),
+      body: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          verticalDirection: VerticalDirection.down,
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18.0),
+              child: TextField(
+                onChanged: (_text1) {
+                  setState(() {
+                    pass = _text1;
+                  });
+                },
+                decoration: InputDecoration(
+                  enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.orangeAccent)),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red)),
+                  hintText: 'Lütfen adınızı ve soyadınızı giriniz.',
+                  labelText: 'adınız ve soyadınız',
+                  icon: Icon(
+                    Icons.person,
+                    color: Colors.black,
+                  ),
+                ),
+                controller: passController,
+                onTap: () {
+                  print('Text editing\'e basıldı.');
+                },
+                onEditingComplete: () {
+                  print("Text edit bitti!");
+                },
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text('Lütfen cinsiyetinizi seçiniz:'),
+                DropdownButton<String>(
+                  hint: Text("Lütfen Cinsiyet seçiniz"), 
+                  value: _selectedGender,
+                  onChanged: (_gender) {
+                    setState(() {
+                      _selectedGender = _gender;
+                    });
+                  },
+                  items: [
+                    DropdownMenuItem(child: Text("Kadın"), value: 'kadın'),
+                    DropdownMenuItem(child: Text("Erkek"), value: 'erkek'),
+                  ],
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18.0),
+              child: SwitchListTile(
+                value: _isSwitched,
+                onChanged: (SwitchData) {
+                  setState(() {
+                    _isSwitched = SwitchData;
+                  });
+                },
+                activeColor: Colors.deepPurple,
+                title: Text(
+                  'Sigara içiyor musunuz?',
+                  style: TextStyle(color: Colors.white),
+                ),
+                tileColor: Colors.orange,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Visibility(
+                  visible: _isSwitched,
+                  child: Text('Günde kaç sigara içiyorsunuz?')),
+            ),
+            Visibility(
+              visible: _isSwitched,
+              child: Slider(
+                value: _slideValue,
+                activeColor: Colors.orangeAccent,
+                inactiveColor: Colors.black,
+                divisions: 50,
+                max: 50,
+                min: 0,
+                label: _slideValue.round().toString(),
+                onChanged: (slider) {
+                  setState(() {
+                    _slideValue = slider;
+                  });
+                },
+              ),
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            Visibility(
+              visible: _showResult,
+              child: Divider(
+                height: 18,
+                color: Colors.deepPurple,
+              ),
+            ),
+            OutlinedButton(
+                onPressed: () {
+                  Route bitisSayfasinaGec = MaterialPageRoute(
+                      builder: (context) => SonucSayfasi(
+                        pass: pass,
+                        selectedGender: _selectedGender!,
+                        isSwitched: _isSwitched,
+                        slideValue: _slideValue,
+                      ));
+                  Navigator.push(context, bitisSayfasinaGec);
+                },
+                child: Text('verileri gönder'))
+          ],
+        ),
+      ),
+    );
+  }
+}
+sonucSayfasi.dart:
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+class SonucSayfasi extends StatefulWidget {
+  final String pass;
+  final String selectedGender;
+  final bool isSwitched;
+  final double slideValue;
+
+  const SonucSayfasi({
+    required this.pass,
+    super.key,
+    required this.selectedGender,
+    required this.isSwitched,
+    required this.slideValue,
+  });
+
+  @override
+  State<SonucSayfasi> createState() => _SonucSayfasiState();
+}
+
+class _SonucSayfasiState extends State<SonucSayfasi> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(backgroundColor:Colors.orange,title: Text('Sonucunuz'),
+      centerTitle: true,),
+      body: Center(
+        child: Container(
+
+          width: MediaQuery.of(context).size.width*0.8,
+          height: MediaQuery.of(context).size.height*0.4,
+          decoration: BoxDecoration(color: Colors.orange,border: Border.all(color: Colors.deepOrange,width: 4)),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                child: Text('Ad ve Soyad: ${widget.pass}',style: TextStyle(color: Colors.white),),
+              ),
+              Container(
+                child: Text('Selected Gender: ${widget.selectedGender}',style: TextStyle(color: Colors.white)),
+              ),
+              Container(
+                child: Text('Sigara iiçiyor musunuz? ${widget.isSwitched ? "Evet" : "Hayır"}',style: TextStyle(color: Colors.white)),
+              ),
+              Container(
+                child: Text('Günde kaç Paket sigara içiyorsunuz? ${widget.slideValue}',style: TextStyle(color: Colors.white)),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
